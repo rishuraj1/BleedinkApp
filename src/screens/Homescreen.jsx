@@ -29,6 +29,15 @@ const Homescreen = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = JSON.parse(await AsyncStorage.getItem("userData"));
+      setUser(user);
+      if (!user) navigation.navigate("Login");
+    };
+    fetchUser();
+  }, []);
+
   const fetchPosts = async () => {
     setLoading(true);
     try {
@@ -38,11 +47,11 @@ const Homescreen = ({ navigation }) => {
       const data = await response?.data;
       // console.log(data);
       // {debugging purposes}
-      data?.sort((a, b) => {
+      const sortedData = await data?.sort((a, b) => {
         return new Date(b?.createdAt) - new Date(a?.createdAt);
-      });
-      setPosts(data);
-      // console.log(posts, "posts");
+      })
+      setPosts(sortedData);
+      console.log(posts, "posts");
     } catch (error) {
       console.log(error);
     } finally {
@@ -100,7 +109,11 @@ const Homescreen = ({ navigation }) => {
         <Text className="text-2xl font-semibold text-slate-900">
           Hello <Text className="text-indigo-500">User</Text>
         </Text>
-        <UserButton onPress={() => setModalVisible(true)} />
+        <UserButton
+          onPress={() => setModalVisible(true)}
+          width={widthPercentageToDP(13)}
+          height={heightPercentageToDP(6)}
+        />
       </View>
       <Modal
         animationType="slide"
@@ -133,8 +146,7 @@ const Homescreen = ({ navigation }) => {
                 <Button
                   onPress={() => {
                     navigation.navigate("Profile", {
-                      userId: user?._id,
-                      username: user?.userName,
+                      userId: user?.userId,
                     })
                     setModalVisible(!modalVisible)
                   }}
@@ -149,7 +161,7 @@ const Homescreen = ({ navigation }) => {
                   bgcolor={"red"}
                   width={widthPercentageToDP(70)}
                   onPress={() => {
-                    AsyncStorage.removeItem("token");
+                    AsyncStorage.removeItem("userData");
                     navigation.navigate("Login");
                   }}
                 >

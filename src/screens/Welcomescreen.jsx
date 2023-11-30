@@ -23,7 +23,7 @@ const Welcomescreen = () => {
     ring2Padding.value = 0;
 
     const checkUser = async () => {
-      const user = await AsyncStorage.getItem("token");
+      const user = await AsyncStorage.getItem("userData");
       if (user) {
         setTimeout(() => navigation.navigate("Home"), 2500);
       } else {

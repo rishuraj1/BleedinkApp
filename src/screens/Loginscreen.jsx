@@ -53,9 +53,9 @@ const Loginscreen = ({ navigation }) => {
       const response = await axios.post(url, body);
       // console.log(response?.data);
       // alert("Logged in successfully");
-      const token = JSON.stringify(response?.data?.access_token);
-      console.log(token, "token");
-      await AsyncStorage.setItem("token", token);
+      const userData = JSON.stringify(response?.data);
+      console.log(userData);
+      await AsyncStorage.setItem("userData", userData);
       navigation.navigate("Home");
     } catch (error) {
       console.log(error);

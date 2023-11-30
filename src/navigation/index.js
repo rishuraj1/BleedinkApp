@@ -91,7 +91,7 @@ const AppNavigation = () => {
           name="Profile"
           component={Userscreen}
           options={({ route }) => ({
-            title: route.params.username,
+            title: route?.params?.username,
             animation: "slide_from_right",
             headerShown: true,
             headerTitleAlign: "center",
@@ -105,7 +105,7 @@ const AppNavigation = () => {
           name="Post"
           component={Postscreen}
           options={({ route }) => ({
-            title: route.params.header.slice(0, 20) + "...",
+            title: route?.params?.header.slice(0, 20) + "...",
             animation: "slide_from_right",
             headerShown: true,
             headerTitleAlign: "center",

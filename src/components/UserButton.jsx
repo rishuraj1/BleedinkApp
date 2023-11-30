@@ -6,12 +6,12 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
-const UserButton = ({ onPress }) => {
+const UserButton = ({ onPress, width, height }) => {
   return (
     <Pressable onPress={onPress} className="bg-indigo-500 rounded-full">
       <Image
         source={Usericon}
-        style={{ width: hp(6), height: hp(6), borderRadius: 100 }}
+        style={{ width: width, height: height, borderRadius: 100 }}
       />
     </Pressable>
   );

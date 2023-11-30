@@ -7,18 +7,19 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const Userscreen = ({ navigation, route }) => {
   const [user, setUser] = useState(null);
   const { userId, username } = route?.params;
+  const currUser = { userId, username };
   useEffect(() => {
     const fetchUser = async () => {
-      const token = await AsyncStorage.getItem("token");
-      setUser(token);
-      if (!token) navigation.navigate("Login");
+      const user = JSON.parse(await AsyncStorage.getItem("userData"));
+      setUser(user);
+      if (!user) navigation.navigate("Login");
     };
     fetchUser();
   }, []);
 
   const handleLogout = () => {
     console.log("Logout");
-    AsyncStorage.removeItem("token");
+    AsyncStorage.removeItem("userData");
     navigation.navigate("Login");
   };
   return (
@@ -30,7 +31,9 @@ const Userscreen = ({ navigation, route }) => {
       >
         Logout
       </Button>
-      <Text className="text-black">{user}</Text>
+      <Text className="text-black">
+        Welcome {currUser?.userId}
+      </Text>
     </SafeAreaView>
   );
 };

@@ -32,6 +32,7 @@ const Postcard = ({ postData, navigation }) => {
       <Pressable onPress={() => navigation.navigate('Post', {
         endpoint: postData?.endpoint,
         header: postData?.title,
+        userId: postData?.createdBy?._id,
       })}>
         <View className="flex-row flex gap-2 items-start justify-between">
           <View className="flex-row items-start justify-center">
@@ -40,7 +41,10 @@ const Postcard = ({ postData, navigation }) => {
               onPress={() => navigation.navigate('Profile', {
                 userId: postData?.createdBy?._id,
                 username: postData?.createdBy?.userName,
-              })} />
+              })}
+              width={heightPercentageToDP(6)}
+              height={heightPercentageToDP(6)}
+            />
             <Text className="text-xl font-semibold text-slate-900 mx-2">
               {postData?.createdBy?.userName}
             </Text>
