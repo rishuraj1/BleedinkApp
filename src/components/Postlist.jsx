@@ -7,7 +7,7 @@ import { fetchPosts } from '../api/fetchPosts'
 import Animated, { BounceInUp } from 'react-native-reanimated'
 import PostcardSkeleton from './skeletons/PostcardSkeleton'
 
-const Postlist = (navigation) => {
+const Postlist = ({ navigation }) => {
     const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(true)
 

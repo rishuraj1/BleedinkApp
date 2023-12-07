@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   RefreshControl,
   Modal,
-  TouchableHighlight
+  TouchableHighlight,
+  FlatList
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -22,10 +23,13 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDataStore } from "../store/store";
 
+const baseUrl = process.env.EXPO_PUBLIC_API_URL;
+
 const Homescreen = ({ navigation }) => {
   const [userData, setUserData] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [search, setSearch] = useState("");
+  const [searchedPosts, setSearchedPosts] = useState([])
 
   const user = useDataStore((state) => state.user);
   console.log(user, "fetched user");
@@ -34,11 +38,23 @@ const Homescreen = ({ navigation }) => {
     setUserData(user);
   }, [user]);
 
+  const getSearchedPosts = async () => {
+    console.log(search, "searched posts");
+    try {
+      const res = await axios.get(`${baseUrl}/post?search=${search}`)
+      const data = res?.data?.data
+      setSearchedPosts(data)
+      // console.log(searchedPosts, "searched posts");
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <SafeAreaView className="bg-slate-200 flex-1">
       <View className="py-5 px-2 flex-row flex justify-between items-center">
         <Text className="text-2xl font-semibold text-slate-900">
-          Hello <Text className="text-indigo-500">User</Text>
+          Hello <Text className="text-indigo-500">{user?.userName}</Text>
         </Text>
         <UserButton
           onPress={() => setModalVisible(true)}
@@ -121,13 +137,42 @@ const Homescreen = ({ navigation }) => {
           />
           <TouchableOpacity
             className="absolute right-2 items-center top-1"
-            onPress={() => console.log("search")}
+            onPress={getSearchedPosts}
           >
             <View className="rounded-md p-2">
               <FontAwesome name="search" size={24} color="#3F51B5" />
             </View>
           </TouchableOpacity>
         </SafeAreaView>
+        {
+          searchedPosts?.length > 0 && (
+            <View style={{ flex: 1 }} className="h-full">
+              <View className="flex-row flex justify-between items-center">
+                <Text className="text-2xl font-semibold my-3 text-indigo-500">
+                  Searched Posts
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    setSearchedPosts([])
+                    setSearch("")
+                  }}
+                >
+                  <Text className="text-2xl font-semibold my-3 text-indigo-500">
+                    Clear
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View className="flex-1">
+                <FlatList
+                  style={{ flex: 1, marginBottom: 1, height: "100%" }}
+                  data={searchedPosts}
+                  keyExtractor={(item) => item?._id}
+                  renderItem={({ item }) => <Postcard postData={item} navigation={navigation} />}
+                />
+              </View>
+            </View>
+          )
+        }
         <Text className="text-2xl font-semibold my-3 text-indigo-500">
           Recent Posts
         </Text>
