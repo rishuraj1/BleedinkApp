@@ -3,8 +3,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
 const timeParser = (time) => {
-  const newTime = dayjs(time).fromNow();
-  return newTime;
+  return dayjs(time).fromNow();
 };
 
 export default timeParser;

@@ -117,24 +117,25 @@ const Signupscreen = ({ navigation }) => {
         >
           <TextInput
             className="bg-slate-200 rounded-md px-4 py-2 my-2"
-            style={{ elevation: 2, width: wp(80) }}
+            style={{ elevation: 2, width: wp(80), fontSize: hp(2.5) }}
             placeholder="Username"
             value={username}
             onChangeText={setUsername}
           />
           <TextInput
             className="bg-slate-200 rounded-md px-4 py-2 my-2"
-            style={{ elevation: 2, width: wp(80) }}
+            style={{ elevation: 2, width: wp(80), fontSize: hp(2.5) }}
             placeholder="Email"
             value={email}
             onChangeText={setEmail}
           />
           <TextInput
             className="bg-slate-200 rounded-md px-4 py-2 my-2"
-            style={{ elevation: 2, width: wp(80) }}
+            style={{ elevation: 2, width: wp(80), fontSize: hp(2.5) }}
             placeholder="Password"
             value={password}
             onChangeText={setPassword}
+            secureTextEntry
           />
         </View>
 

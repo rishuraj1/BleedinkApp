@@ -12,6 +12,8 @@ import Animated, {
 } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDataStore } from "../store/store";
+import { fetchUser } from "../api/fetchUser";
 
 const Welcomescreen = () => {
   const navigation = useNavigation();

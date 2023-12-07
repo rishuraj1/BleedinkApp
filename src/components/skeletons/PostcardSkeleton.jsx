@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-const PostcardSkeleton = () => {
+const PostcardSkeleton = ({ item }) => {
   return (
     <View className="bg-white flex justify-center border-b-2 rounded-md border-slate-300 p-2">
       <View className="flex-row flex gap-2 items-start justify-between">

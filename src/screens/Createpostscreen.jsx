@@ -7,11 +7,20 @@ import { Blogform } from "../components";
 const Createpostscreen = ({ navigation }) => {
   return (
     <SafeAreaView className="flex-1 bg-slate-200">
-      <ScrollView className="p-5">
+      <ScrollView style={{
+        height: heightPercentageToDP('100%'),
+        padding: 20,
+        marginTop: heightPercentageToDP('2%'),
+      }}>
         <Text className="text-2xl font-semibold text-slate-800">
           Create Post
         </Text>
-        <Blogform navigation={navigation} />
+        <View className="flex" style={{
+          height: heightPercentageToDP('100%'),
+          marginTop: heightPercentageToDP('6%'),
+        }}>
+          <Blogform navigation={navigation} />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

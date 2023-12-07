@@ -2,7 +2,7 @@ import { View, Text, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Form, TextArea } from 'tamagui'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
-import Button from './Button'
+import { Button, MyTooltip } from '../components'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 
@@ -88,7 +88,11 @@ const Blogform = ({ navigation }) => {
             borderWidth: 1,
             marginBottom: 20,
             padding: 10,
-            backgroundColor: 'white'
+            backgroundColor: 'white',
+            fontSize: heightPercentageToDP('2.5%'),
+            borderRadius: 5,
+            width: widthPercentageToDP('100%')
+
           }}
         />
         <Text className="text-slate-800 text-xl font-semibold">Blog Content</Text>
@@ -100,6 +104,15 @@ const Blogform = ({ navigation }) => {
           textAlign='left'
           alignItems='flex-start'
           marginBottom={20}
+          style={{
+            borderColor: 'gray',
+            borderWidth: 1,
+            padding: 10,
+            backgroundColor: 'white',
+            fontSize: heightPercentageToDP('2.5%'),
+            borderRadius: 5,
+            width: widthPercentageToDP('100%')
+          }}
         />
         <Form.Trigger asChild>
           <Button
@@ -115,6 +128,7 @@ const Blogform = ({ navigation }) => {
           </Button>
         </Form.Trigger>
       </Form>
+      <MyTooltip />
     </View>
   )
 }

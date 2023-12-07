@@ -6,11 +6,12 @@ import {
   Pressable,
   TouchableOpacity,
   RefreshControl,
-  Modal
+  Modal,
+  TouchableHighlight
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, PostcardSkeleton, UserButton } from "../components";
+import { Button, PostcardSkeleton, Postlist, UserButton } from "../components";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import axios from "axios";
 import Postcard from "../components/Postcard";
@@ -19,92 +20,22 @@ import {
   widthPercentageToDP,
 } from "react-native-responsive-screen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDataStore } from "../store/store";
 
 const Homescreen = ({ navigation }) => {
-  const [posts, setPosts] = useState([]);
-  const [searchedResults, setSearchedResults] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [user, setUser] = useState(null);
-  const [refreshing, setRefreshing] = useState(false);
+  const [userData, setUserData] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [search, setSearch] = useState("");
+
+  const user = useDataStore((state) => state.user);
+  console.log(user, "fetched user");
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const user = JSON.parse(await AsyncStorage.getItem("userData"));
-      setUser(user);
-      if (!user) navigation.navigate("Login");
-    };
-    fetchUser();
-  }, []);
-
-  const fetchPosts = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        "https://bloggler-backend.vercel.app/api/post"
-      );
-      const data = await response?.data;
-      // console.log(data);
-      // {debugging purposes}
-      const sortedData = await data?.sort((a, b) => {
-        return new Date(b?.createdAt) - new Date(a?.createdAt);
-      })
-      setPosts(sortedData);
-      console.log(posts, "posts");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setTimeout(() => setLoading(false), 1000);
-    }
-  };
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    fetchPosts(search);
-    setTimeout(() => setRefreshing(false), 2000);
-  })
-
-  const handleSearch = async (search) => {
-    setLoading(true);
-    // search data in posts in posts state
-    setSearchedResults([]);
-    if (search === "") {
-      fetchPosts();
-      return;
-    }
-    try {
-      if (search === "") fetchPosts();
-      const filteredPosts = posts.filter(
-        (post) =>
-          post?.title?.toLowerCase().includes(search.toLowerCase()) ||
-          post?.content?.toLowerCase().includes(search.toLowerCase()) ||
-          post?.createdBy?.userName
-            ?.toLowerCase()
-            .includes(search.toLowerCase())
-      );
-      const data = filteredPosts?.sort((a, b) => {
-        return new Date(b?.createdAt) - new Date(a?.createdAt);
-      });
-      console.log(filteredPosts);
-      setSearchedResults(data || []);
-      console.log(searchedResults, "searchedResults");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setTimeout(() => setLoading(false), 1000);
-    }
-  }
-
-  useEffect(() => {
-    fetchPosts(search);
-  }, [setLoading, setPosts]);
-
-  // console.log(posts.length);
-  // console.log(posts[0]?._id), "post1";
+    setUserData(user);
+  }, [user]);
 
   return (
-    <SafeAreaView className="flex-1 bg-slate-200">
+    <SafeAreaView className="bg-slate-200 flex-1">
       <View className="py-5 px-2 flex-row flex justify-between items-center">
         <Text className="text-2xl font-semibold text-slate-900">
           Hello <Text className="text-indigo-500">User</Text>
@@ -113,6 +44,7 @@ const Homescreen = ({ navigation }) => {
           onPress={() => setModalVisible(true)}
           width={widthPercentageToDP(13)}
           height={heightPercentageToDP(6)}
+          userImage={userData?.imageUrl}
         />
       </View>
       <Modal
@@ -161,6 +93,7 @@ const Homescreen = ({ navigation }) => {
                   bgcolor={"red"}
                   width={widthPercentageToDP(70)}
                   onPress={() => {
+                    useDataStore.setState({ user: null });
                     AsyncStorage.removeItem("userData");
                     navigation.navigate("Login");
                   }}
@@ -172,101 +105,34 @@ const Homescreen = ({ navigation }) => {
           </View>
         </View>
       </Modal>
-      <ScrollView
-        className="px-2"
-        keyboardDismissMode="on-drag"
-        keyboardShouldPersistTaps="never"
-
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={["#3F51B5", "black", "red"]}
-            progressBackgroundColor={"#fff"}
-          />
-        }
+      <SafeAreaView
+        className="px-2 bg-slate-200 flex-1"
       >
-        <View className="flex-row flex justify-between">
+        <SafeAreaView className="flex-row flex justify-between">
           <TextInput
             className="rounded-md p-2 w-full text-slate-900 bg-slate-300 border-2 border-slate-300 mr-2"
             placeholder="Search Posts"
             value={search}
             onChangeText={setSearch}
+            style={{
+              fontSize: 18,
+              fontWeight: "500",
+            }}
           />
           <TouchableOpacity
             className="absolute right-2 items-center top-1"
-            onPress={() => handleSearch(search)}
+            onPress={() => console.log("search")}
           >
             <View className="rounded-md p-2">
               <FontAwesome name="search" size={24} color="#3F51B5" />
             </View>
           </TouchableOpacity>
-        </View>
-
-        {
-          posts?.length === 0 ? (
-            <View className="flex">
-              <Text className="text-2xl font-semibold text-slate-800">
-                No Posts Found
-              </Text>
-            </View>
-          ) : (
-            <>
-              {
-                search && searchedResults?.length > 0 && (
-                  <View className="flex">
-                    <View className="flex-row flex justify-between items-center my-3">
-                      <Text className="text-2xl font-semibold text-slate-800">
-                        Search Results for{" "}
-                        <Text className="text-indigo-500">"{search}"</Text>
-                      </Text>
-                    </View>
-                    {searchedResults?.map((post) => (
-                      <>
-                        {loading ? (
-                          <View className="flex my-1" key={post?._id}>
-                            <PostcardSkeleton key={post?._id} />
-                          </View>
-                        ) : (
-                          <Pressable
-                            key={post?._id}
-                            className="my-1"
-                          >
-                            <Postcard key={post?._id} postData={post} navigation={navigation} />
-                          </Pressable>
-                        )}
-                      </>
-                    ))}
-                  </View>
-                )
-              }
-              <View className="flex">
-                <View className="flex-row flex justify-between items-center my-3">
-                  <Text className="text-2xl font-semibold text-indigo-500">
-                    Recent Posts
-                  </Text>
-                </View>
-                {posts?.map((post) => (
-                  <>
-                    {loading ? (
-                      <View className="flex my-1" key={post?._id}>
-                        <PostcardSkeleton key={post?._id} />
-                      </View>
-                    ) : (
-                      <Pressable
-                        key={post?._id}
-                        className="my-1"
-                      >
-                        <Postcard key={post?._id} postData={post} navigation={navigation} />
-                      </Pressable>
-                    )}
-                  </>
-                ))}
-              </View>
-            </>
-          )
-        }
-      </ScrollView >
+        </SafeAreaView>
+        <Text className="text-2xl font-semibold my-3 text-indigo-500">
+          Recent Posts
+        </Text>
+        <Postlist navigattion={navigation} />
+      </SafeAreaView >
     </SafeAreaView >
   );
 };

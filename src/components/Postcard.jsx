@@ -1,11 +1,13 @@
-import { View, Text, Pressable, Share } from "react-native";
-import React from "react";
+import { View, Text, Pressable, Share, SafeAreaView } from "react-native";
+import React, { memo, useEffect } from "react";
 import { UserButton, timeParser } from ".";
 import { AntDesign, FontAwesome5, Feather } from '@expo/vector-icons';
 import { heightPercentageToDP } from "react-native-responsive-screen";
+import Animated, { BounceInUp } from "react-native-reanimated";
+import { useNavigation } from "@react-navigation/native";
 
-const Postcard = ({ postData, navigation }) => {
-  // console.log(postData?.title, "postdata");
+const Postcard = ({ postData }) => {
+  // console.log(postData, "postdata");
 
   const handleShare = async () => {
     console.log("share");
@@ -27,57 +29,77 @@ const Postcard = ({ postData, navigation }) => {
     }
   }
 
+  const navigation = useNavigation();
+
+
   return (
-    <View className="bg-white flex justify-center border-b-2 rounded-md border-slate-300 p-2">
-      <Pressable onPress={() => navigation.navigate('Post', {
-        endpoint: postData?.endpoint,
-        header: postData?.title,
-        userId: postData?.createdBy?._id,
-      })}>
-        <View className="flex-row flex gap-2 items-start justify-between">
-          <View className="flex-row items-start justify-center">
+    <Animated.View
+      style={{
+        backgroundColor: "#fff",
+        padding: 7,
+        marginVertical: 1,
+        borderRadius: 5,
+        elevation: 3,
+      }}
+    >
+      <Pressable
+        onPress={() => navigation.navigate('Post', {
+          postId: postData?._id,
+          endpoint: postData?.endpoint,
+          title: postData?.title,
+          userId: postData?.createdBy?._id,
+          username: postData?.createdBy?.userName,
+          header: postData?.title
+        })}
+      >
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
             <UserButton
-              user={postData?.createdBy}
+              userImage={postData?.createdBy?.imageUrl}
               onPress={() => navigation.navigate('Profile', {
-                userId: postData?.createdBy?._id,
                 username: postData?.createdBy?.userName,
+                userId: postData?.createdBy?._id,
               })}
               width={heightPercentageToDP(6)}
               height={heightPercentageToDP(6)}
             />
-            <Text className="text-xl font-semibold text-slate-900 mx-2">
+            <Text style={{ marginLeft: 5, fontSize: heightPercentageToDP(3) }} className="text-indigo-500">
               {postData?.createdBy?.userName}
             </Text>
           </View>
-          <View>
-            <Text className="text-sm text-slate-600">
-              {timeParser(postData?.createdAt)}
-            </Text>
-          </View>
+          <Text style={{ marginLeft: 5 }}>
+            {postData?.createdAt}
+          </Text>
         </View>
-        <View className="flex-1 py-2">
-          <Text className="text-lg font-semibold">{postData?.title}</Text>
-          <Text className="text-sm font-semibold">{postData?.content?.slice(0, 30)}...</Text>
-        </View>
+        <Text style={{ fontSize: 20, fontWeight: "bold", marginVertical: 10 }}>
+          {postData?.title}
+        </Text>
+        <Text style={{ fontSize: 16 }}>{postData?.content}</Text>
       </Pressable>
 
-      {/* likes comment share array */}
-      <View className="flex flex-row justify-between p-2">
-        <View className="flex flex-row items-center justify-center gap-1">
-          <AntDesign name="hearto" size={heightPercentageToDP(2.8)} color="#404e5a" />
-          <Text className="text-lg text-slate-600">{postData?.likes?.length}</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginVertical: 10,
+        }}
+      >
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <FontAwesome5 name="heart" size={24} color="black" />
+          <Text style={{ marginLeft: 5 }}>{postData?.likes?.length || 0}</Text>
         </View>
-
-        <View className="flex flex-row items-center justify-center gap-1">
-          <FontAwesome5 name="comment-dots" size={heightPercentageToDP(2.8)} color="#404e5a" />
-          <Text className="text-lg text-slate-600">{postData?.comments?.length}</Text>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Feather name="message-circle" size={24} color="black" />
+          <Text style={{ marginLeft: 5 }}>{postData?.comments?.length || 0}</Text>
         </View>
-        <Pressable onPress={handleShare}>
-          <Feather name="share-2" size={heightPercentageToDP(2.8)} color="#404e5a" />
-        </Pressable>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Pressable onPress={handleShare}>
+            <AntDesign name="sharealt" size={24} color="black" />
+          </Pressable>
+        </View>
       </View>
-    </View>
+    </Animated.View>
   );
 };
 
-export default Postcard;
+export default memo(Postcard);

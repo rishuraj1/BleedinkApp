@@ -13,6 +13,10 @@ import { loginbg } from "../../assets";
 import { Button } from "../components";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDataStore } from "../store/store";
+import { fetchUser } from "../api/fetchUser";
+
+const baseUrl = process.env.EXPO_PUBLIC_API_URL;
 
 const Loginscreen = ({ navigation }) => {
   const custopacity = useSharedValue(0);
@@ -54,11 +58,18 @@ const Loginscreen = ({ navigation }) => {
       // console.log(response?.data);
       // alert("Logged in successfully");
       const userData = JSON.stringify(response?.data);
-      console.log(userData);
+      // console.log(response?.data?.userId, response?.data?.access_token, "loginscreen");
+      const userdata = await axios.get(`${baseUrl}/user/getUser?id=${response?.data?.userId}`, {
+        headers: {
+          Authorization: `Bearer ${response?.data?.access_token}`,
+        },
+      })
+      // console.log(user?.data, "fetched user data");
       await AsyncStorage.setItem("userData", userData);
+      useDataStore.setState({ user: userdata?.data })
       navigation.navigate("Home");
     } catch (error) {
-      console.log(error);
+      console.log(error, "loginscreen error");
     }
   };
 
@@ -111,17 +122,18 @@ const Loginscreen = ({ navigation }) => {
         <View className="flex-1" style={{ marginTop: hp(5), gap: hp(2) }}>
           <TextInput
             className="bg-slate-200 rounded-md px-4 py-2 mt-2"
-            style={{ elevation: 2, width: wp(80) }}
+            style={{ elevation: 2, width: wp(80), fontSize: hp(2.5) }}
             placeholder="Email"
             value={email}
             onChangeText={setEmail}
           />
           <TextInput
-            className="bg-slate-200 rounded-md px-4 py-2 mt-2"
-            style={{ elevation: 2, width: wp(80) }}
+            className="bg-slate-200 rounded-md px-4 py-2 my-2"
+            style={{ elevation: 2, width: wp(80), fontSize: hp(2.5) }}
             placeholder="Password"
             value={password}
             onChangeText={setPassword}
+            secureTextEntry
           />
         </View>
 
