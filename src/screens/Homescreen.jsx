@@ -21,7 +21,7 @@ import {
   widthPercentageToDP,
 } from "react-native-responsive-screen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useDataStore } from "../store/store";
+import { useDataStore, usePostStore } from "../store/store";
 
 const baseUrl = process.env.EXPO_PUBLIC_API_URL;
 
@@ -110,6 +110,7 @@ const Homescreen = ({ navigation }) => {
                   width={widthPercentageToDP(70)}
                   onPress={() => {
                     useDataStore.setState({ user: null });
+                    usePostStore.setState({ postData: [] });
                     AsyncStorage.removeItem("userData");
                     navigation.navigate("Login");
                   }}

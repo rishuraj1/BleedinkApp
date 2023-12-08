@@ -16,10 +16,33 @@ const dataStore = (set) => ({
   },
 });
 
+const postStore = (set) => ({
+  postData: [],
+  addPostData: (postData) => {
+    set((state) => {
+      postData: [postData];
+    });
+  },
+  removePostData: () => {
+    set((state) => {
+      postData: null;
+    });
+  },
+});
+
 export const useDataStore = create(
   devtools(
     persist(dataStore, {
       name: "userdata",
+      getStorage: () => AsyncStorage,
+    })
+  )
+);
+
+export const usePostStore = create(
+  devtools(
+    persist(postStore, {
+      name: "postdata",
       getStorage: () => AsyncStorage,
     })
   )
