@@ -28,24 +28,6 @@ const Postlist = ({ navigation }) => {
         }
     }
 
-    const handleLike = async (id) => {
-        const userData = await AsyncStorage.getItem("userData");
-        const thisUser = JSON.parse(userData);
-        console.log(thisUser?.access_token, id, "this user");
-        try {
-            const options = {
-                headers: {
-                    Authorization: `Bearer ${thisUser?.access_token}`
-                }
-            }
-            const response = await axios.patch(`${baseUrl}/post/like/${id}`, {}, options)
-            console.log(response?.data, "like response");
-            setPosts([...posts, response?.data])
-        } catch (error) {
-            console.log(error, "like error");
-        }
-    }
-
     useEffect(() => {
         getPosts()
     }, [setPosts])
@@ -58,9 +40,9 @@ const Postlist = ({ navigation }) => {
             renderItem={({ item }) => (
                 <Postcard
                     postData={item}
-                    onLike={() => handleLike(item?._id)}
                     setPosts={setPosts}
                     navigation={navigation}
+                    posts={posts}
                 />
             )}
             ListFooterComponent={() => {

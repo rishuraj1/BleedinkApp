@@ -1,9 +1,9 @@
-import { View, Text, SafeAreaView, ScrollView, Image, TextInput, TouchableOpacity, Pressable, FlatList, Modal } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, Image, TextInput, TouchableOpacity, Pressable, FlatList, Modal, Keyboard } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { userCover } from '../../assets'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
-import { Commentcard, Deletemodal, UserButton } from '../components'
+import { Commentcard, UserButton } from '../components'
 import { useDataStore } from '../store/store'
 import { fetchUser } from '../api/fetchUser'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -24,6 +24,7 @@ const Postscreen = ({ route, navigation }) => {
     const [comment, setComment] = useState([])
     const [commentText, setCommentText] = useState('')
     const [modal, setModal] = useState(false)
+    const [posting, setPosting] = useState(false)
 
 
     const getPost = async () => {
@@ -67,6 +68,7 @@ const Postscreen = ({ route, navigation }) => {
 
     const handleComment = async () => {
         if (!commentText) return
+        setPosting(true)
         const userData = await AsyncStorage.getItem('userData')
         const user = await JSON.parse(userData)
         // console.log('user', user?.access_token)
@@ -89,28 +91,8 @@ const Postscreen = ({ route, navigation }) => {
             console.log(JSON.stringify(error?.response))
         } finally {
             setCommentText('')
-        }
-    }
-
-    const handleDeleteItem = async (id) => {
-        const userData = await AsyncStorage.getItem('userData')
-        const user = await JSON.parse(userData)
-        console.log('user', user?.access_token)
-        const requestOptions = {
-            headers: {
-                Authorization: `Bearer ${user?.access_token}`,
-                'Content-Type': 'application/json'
-            }
-        }
-        const data = {
-            "postId": postId,
-            "commentId": id
-        }
-        try {
-            const response = await axios.delete(`${baseUrl}/post/deleteComment`, data, requestOptions)
-            console.log(JSON.stringify(response), "delete response")
-        } catch (error) {
-            console.log(JSON.stringify(error?.response))
+            setPosting(false)
+            Keyboard.dismiss()
         }
     }
 
@@ -159,20 +141,14 @@ const Postscreen = ({ route, navigation }) => {
                                     userName={userName}
                                     navigation={navigation}
                                     setModal={setModal}
-                                    setComment={setComment}
                                     postId={postId}
-                                />
-                                <Deletemodal
                                     modal={modal}
-                                    setModal={setModal}
-                                    onDelete={() => handleDeleteItem(item._id)}
-                                    firstOption="Cancel"
-                                    secondOption="Delete"
-                                    message={"Are you sure you want to delete this comment?"}
+                                    comment={comment}
+                                    setComment={setComment}
                                 />
                             </>
                         )}
-                        extraData={this.state}
+                        extraData={comment}
                         ListEmptyComponent={() => (
                             <View className="flex-1 justify-center items-center">
                                 <Text className="text-indigo-500 text-lg font-semibold">No comments yet</Text>
@@ -193,7 +169,7 @@ const Postscreen = ({ route, navigation }) => {
                     numberOfLines={4}
                 />
                 <Pressable onPress={handleComment} className="w-1/5 h-10 bg-indigo-500 justify-center items-center">
-                    <Text className="text-white text-sm">Post</Text>
+                    <Text className="text-white text-sm">{posting ? "Posting..." : "Post"}</Text>
                 </Pressable>
             </View>
         </SafeAreaView >

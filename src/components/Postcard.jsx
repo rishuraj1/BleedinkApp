@@ -11,10 +11,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const baseUrl = process.env.EXPO_PUBLIC_API_URL;
 
-const Postcard = ({ postData, setPosts, onLike }) => {
+const Postcard = ({ postData, setPosts, posts }) => {
   const thisUser = useDataStore((state) => state.user);
   const [isLiked, setIsLiked] = useState(postData?.like?.includes(thisUser?._id));
   const [post, setPost] = useState(postData);
+  const [author, setAuthor] = useState(post?.createdBy);
 
   const handleShare = async () => {
     console.log("share");
@@ -35,6 +36,32 @@ const Postcard = ({ postData, setPosts, onLike }) => {
       console.log(error);
     }
   }
+
+  const handleLike = async () => {
+    const userData = await AsyncStorage.getItem("userData");
+    const user = JSON.parse(userData);
+    console.log(user?.access_token, post?._id, "this user");
+    try {
+      const options = {
+        headers: {
+          Authorization: `Bearer ${user?.access_token}`
+        }
+      }
+      const response = await axios.patch(`${baseUrl}/post/like/${post?._id}`, {}, options)
+      console.log(response?.data, "like response");
+      const updatedPost = response?.data;
+      setPosts([...posts, updatedPost])
+      setPost(updatedPost);
+      console.log(post?.like?.includes(thisUser?._id), thisUser?._id, "is liked");
+    } catch (error) {
+      console.log(error, "like error");
+    }
+  }
+
+  useEffect(() => {
+    setIsLiked(post?.like?.includes(thisUser?._id));
+  }, [post, setPost, setIsLiked])
+
 
   const navigation = useNavigation();
 
@@ -62,16 +89,16 @@ const Postcard = ({ postData, setPosts, onLike }) => {
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
             <UserButton
-              userImage={post?.createdBy?.imageUrl}
+              userImage={author?.imageUrl}
               onPress={() => navigation.navigate('Profile', {
-                username: post?.createdBy?.userName === thisUser?.userName ? "Your Profile" : post?.createdBy?.userName,
-                userId: post?.createdBy?._id,
+                username: author?.userName === thisUser?.userName ? "Your Profile" : author?.userName,
+                userId: author?._id,
               })}
               width={heightPercentageToDP(6)}
               height={heightPercentageToDP(6)}
             />
             <Text style={{ marginLeft: 5, fontSize: heightPercentageToDP(3) }} className="text-indigo-500">
-              {post?.createdBy?.userName}
+              {author?.userName}
             </Text>
           </View>
           <Text style={{ marginLeft: 5 }}>
@@ -92,7 +119,7 @@ const Postcard = ({ postData, setPosts, onLike }) => {
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <TouchableOpacity onPress={onLike}>
+          <TouchableOpacity onPress={handleLike}>
             {
               isLiked ? (
                 <Ionicons name="heart" size={24} color="indigo" />
