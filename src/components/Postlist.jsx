@@ -6,6 +6,9 @@ import { heightPercentageToDP } from 'react-native-responsive-screen'
 import { fetchPosts } from '../api/fetchPosts'
 import Animated, { BounceInUp } from 'react-native-reanimated'
 import PostcardSkeleton from './skeletons/PostcardSkeleton'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
+const baseUrl = process.env.EXPO_PUBLIC_API_URL
 
 const Postlist = ({ navigation }) => {
     const [posts, setPosts] = useState([])
@@ -25,16 +28,41 @@ const Postlist = ({ navigation }) => {
         }
     }
 
+    const handleLike = async (id) => {
+        const userData = await AsyncStorage.getItem("userData");
+        const thisUser = JSON.parse(userData);
+        console.log(thisUser?.access_token, id, "this user");
+        try {
+            const options = {
+                headers: {
+                    Authorization: `Bearer ${thisUser?.access_token}`
+                }
+            }
+            const response = await axios.patch(`${baseUrl}/post/like/${id}`, {}, options)
+            console.log(response?.data, "like response");
+            setPosts([...posts, response?.data])
+        } catch (error) {
+            console.log(error, "like error");
+        }
+    }
+
     useEffect(() => {
         getPosts()
-    }, [])
+    }, [setPosts])
 
     return (
         <FlatList
             style={{ flex: 1, marginBottom: 1 }}
             data={posts}
             keyExtractor={(item) => item?._id}
-            renderItem={({ item }) => <Postcard postData={item} setPosts={setPosts} />}
+            renderItem={({ item }) => (
+                <Postcard
+                    postData={item}
+                    onLike={() => handleLike(item?._id)}
+                    setPosts={setPosts}
+                    navigation={navigation}
+                />
+            )}
             ListFooterComponent={() => {
                 return loading ? <ActivityIndicator size="large" color="#0000ff" /> : null
             }}
@@ -45,6 +73,7 @@ const Postlist = ({ navigation }) => {
             }}
             onRefresh={() => getPosts()}
             refreshing={loading}
+            extraData={posts}
         />
     )
 }

@@ -73,9 +73,6 @@ const Homescreen = ({ navigation }) => {
         <View className="flex-1 justify-center items-center bg-black bg-opacity-50">
           <View className="bg-white rounded-md p-2 w-4/5">
             <View className="flex-row flex justify-between items-center">
-              <Text className="text-2xl font-semibold text-slate-900">
-                Profile
-              </Text>
               <TouchableOpacity
                 onPress={() => setModalVisible(!modalVisible)}
               >
@@ -94,7 +91,8 @@ const Homescreen = ({ navigation }) => {
                 <Button
                   onPress={() => {
                     navigation.navigate("Profile", {
-                      userId: user?.userId,
+                      userId: user?._id,
+                      username: "Your Profile"
                     })
                     setModalVisible(!modalVisible)
                   }}
