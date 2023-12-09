@@ -6,6 +6,7 @@ export { default as Blogform } from "./Blogform.jsx";
 export { default as Postlist } from "./Postlist.jsx";
 export { default as MyTooltip } from "./MyTooltip.jsx";
 export { default as Commentcard } from './Commentcard.jsx'
+export { default as Deletemodal } from './Deletemodal.jsx'
 
 // skeletons
 export { default as PostcardSkeleton } from "./skeletons/PostcardSkeleton.jsx";

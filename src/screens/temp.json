@@ -1,19 +1,18 @@
 {
-  "data": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Internal Server Error</pre>\n</body>\n</html>\n",
-  "status": 500,
+  "data": { "message": "Unauthorized" },
+  "status": 401,
   "headers": {
     "access-control-allow-origin": "*",
     "cache-control": "public, max-age=0, must-revalidate",
-    "content-length": "148",
-    "content-security-policy": "default-src 'none'",
-    "content-type": "text/html; charset=utf-8",
-    "date": "Fri, 08 Dec 2023 14:59:21 GMT",
+    "content-length": "26",
+    "content-type": "application/json; charset=utf-8",
+    "date": "Sat, 09 Dec 2023 08:13:15 GMT",
+    "etag": "W/\"1a-pljHtlo127JYJR4E/RYOPb6ucbw\"",
     "server": "Vercel",
     "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
-    "x-content-type-options": "nosniff",
     "x-powered-by": "Express",
     "x-vercel-cache": "MISS",
-    "x-vercel-id": "bom1::iad1::65ttt-1702047560951-1df98e39587a"
+    "x-vercel-id": "bom1::iad1::6kjlz-1702109594897-40ee04064e76"
   },
   "config": {
     "transitional": {
@@ -30,13 +29,11 @@
     "maxContentLength": -1,
     "maxBodyLength": -1,
     "env": {},
-    "headers": {
-      "Accept": "application/json, text/plain, */*",
-      "Content-Type": "application/json"
-    },
-    "method": "patch",
-    "url": "https://bloggler-backend.vercel.app/api/post/comment",
-    "data": "{\"headers\":{\"Authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTY5ZGUxZWUzNDJjYzY0MjM5NDFjOTAiLCJ1c2VyTmFtZSI6ImRlbW84MCIsImVtYWlsIjoiZGVtbzgwQGRlbW8uY29tIiwiaWF0IjoxNzAyMDIwMDk4LCJleHAiOjE3MDQ2MTIwOTh9.41y8mCPSXHO4AyiCNiDYkirpXciEZadbrOPxU1ZSsQI\",\"Content-Type\":\"application/json\"},\"data\":\"{\\\"postId\\\":\\\"65731e079c9750eebd0d7ac1\\\",\\\"comment\\\":\\\"comment\\\"}\"}"
+    "headers": { "Accept": "application/json, text/plain, */*" },
+    "postId": "65731e079c9750eebd0d7ac1",
+    "commentId": "657320e89c9750eebd0d7b77",
+    "method": "delete",
+    "url": "https://bloggler-backend.vercel.app/api/post/deleteComment"
   },
   "request": {
     "UNSENT": 0,
@@ -45,122 +42,127 @@
     "LOADING": 3,
     "DONE": 4,
     "readyState": 4,
-    "status": 500,
+    "status": 401,
     "timeout": 0,
     "withCredentials": true,
     "upload": {},
     "_aborted": false,
     "_hasError": false,
-    "_method": "PATCH",
-    "_perfKey": "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/post/comment",
-    "_response": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Internal Server Error</pre>\n</body>\n</html>\n",
-    "_url": "https://bloggler-backend.vercel.app/api/post/comment",
+    "_method": "DELETE",
+    "_perfKey": "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/post/deleteComment",
+    "_response": "{\"message\":\"Unauthorized\"}",
+    "_url": "https://bloggler-backend.vercel.app/api/post/deleteComment",
     "_timedOut": false,
     "_trackingName": "unknown",
     "_incrementalEvents": false,
     "_performanceLogger": {
       "_timespans": {
         "network_XMLHttpRequest_http://192.168.29.238:8081/symbolicate": {
-          "startTime": 4738203.826512,
-          "endTime": 4741189.411743,
-          "totalTime": 2985.5852310005575
+          "startTime": 38408232.713981,
+          "endTime": 38411336.294673,
+          "totalTime": 3103.580692000687
         },
         "network_XMLHttpRequest_http://192.168.29.238:8081/logs": {
-          "startTime": 4741179.872974,
-          "endTime": 4741219.002205,
-          "totalTime": 39.12923100031912
+          "startTime": 38411281.830596,
+          "endTime": 38411379.803212,
+          "totalTime": 97.97261600196362
         },
         "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/post?limit=500": {
-          "startTime": 4744755.893666,
-          "endTime": 4746279.683743,
-          "totalTime": 1523.790076999925
+          "startTime": 38414551.842596,
+          "endTime": 38425012.761366,
+          "totalTime": 10460.918770000339
         },
-        "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/post/for-testing..": {
-          "startTime": 4794958.336439,
-          "endTime": 4795424.868439,
-          "totalTime": 466.5319999996573
-        },
-        "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/user/getUser?id=65731c639c9750eebd0d79b0": {
-          "startTime": 4794970.7309,
-          "endTime": 4799778.486593,
-          "totalTime": 4807.75569299981
-        },
-        "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/user/getUser?id=6560babc62e695fffc561617": {
-          "startTime": 4795744.863131,
-          "endTime": 4800606.333593,
-          "totalTime": 4861.4704619999975
-        },
-        "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/user/getUser?id=undefined": {
-          "startTime": 4808482.708362,
-          "endTime": 4808749.697055,
-          "totalTime": 266.98869299981743
-        },
-        "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/post/comment": {
-          "startTime": 4812483.968055,
-          "endTime": 4812772.224055,
-          "totalTime": 288.25600000005215
-        },
-        "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/user/getUser?id=6569de1ee342cc6423941c90": {
-          "startTime": 5497390.506019,
-          "endTime": 5498032.853019,
-          "totalTime": 642.347000000067
-        },
-        "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/post/Mahima-there!!!-3": {
-          "startTime": 5671724.600799,
-          "endTime": 5672232.85426,
-          "totalTime": 508.25346100050956
+        "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/post/Mahima-there!!!-4": {
+          "startTime": 38432582.821059,
+          "endTime": 38433118.324213,
+          "totalTime": 535.5031539946795
         },
         "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/user/getUser?id=6565a7ad79cb8d94d3fbba4f": {
-          "startTime": 5671753.659799,
-          "endTime": 5672820.306952,
-          "totalTime": 1066.647152999416
+          "startTime": 38432611.742982,
+          "endTime": 38437371.156828,
+          "totalTime": 4759.413846001029
+        },
+        "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/post/for-testing..": {
+          "startTime": 38435774.440213,
+          "endTime": 38436343.804751,
+          "totalTime": 569.3645379990339
+        },
+        "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/user/getUser?id=65731c639c9750eebd0d79b0": {
+          "startTime": 38435793.909751,
+          "endTime": 38440630.090906,
+          "totalTime": 4836.181155003607
+        },
+        "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/user/getUser?id=6569de1ee342cc6423941c90": {
+          "startTime": 38436832.739521,
+          "endTime": 38437373.367828,
+          "totalTime": 540.6283069998026
+        },
+        "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/user/getUser?id=6560babc62e695fffc561617": {
+          "startTime": 38436839.959828,
+          "endTime": 38437839.271828,
+          "totalTime": 999.3120000064373
+        },
+        "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/post/deleteComment": {
+          "startTime": 38754917.017386,
+          "endTime": 38755179.087001,
+          "totalTime": 262.06961500644684
+        },
+        "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/user/getUser?id=undefined": {
+          "startTime": 39355812.605191,
+          "endTime": 39356093.270729,
+          "totalTime": 280.66553799808025
+        },
+        "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/post/comment": {
+          "startTime": 41248716.283765,
+          "endTime": 41249471.609535,
+          "totalTime": 755.3257699981332
+        },
+        "network_XMLHttpRequest_https://bloggler-backend.vercel.app/api/user/login": {
+          "startTime": 42002411.54681,
+          "endTime": 42003139.472118,
+          "totalTime": 727.9253079965711
         }
       },
       "_extras": {},
       "_points": {
-        "initializeCore_start": 4736903.004974,
-        "initializeCore_end": 4737499.788051
+        "initializeCore_start": 38407166.251211,
+        "initializeCore_end": 38407530.701057
       },
       "_pointExtras": {},
       "_closed": false,
       "_isLoggingForWebPerformance": false
     },
     "responseHeaders": {
-      "content-security-policy": "default-src 'none'",
-      "content-type": "text/html; charset=utf-8",
-      "x-content-type-options": "nosniff",
-      "content-length": "148",
+      "x-vercel-id": "bom1::iad1::6kjlz-1702109594897-40ee04064e76",
+      "content-type": "application/json; charset=utf-8",
+      "content-length": "26",
       "x-vercel-cache": "MISS",
-      "date": "Fri, 08 Dec 2023 14:59:21 GMT",
+      "date": "Sat, 09 Dec 2023 08:13:15 GMT",
       "server": "Vercel",
       "x-powered-by": "Express",
       "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
-      "x-vercel-id": "bom1::iad1::65ttt-1702047560951-1df98e39587a",
+      "etag": "W/\"1a-pljHtlo127JYJR4E/RYOPb6ucbw\"",
       "cache-control": "public, max-age=0, must-revalidate",
       "access-control-allow-origin": "*"
     },
     "_requestId": null,
-    "_headers": {
-      "accept": "application/json, text/plain, */*",
-      "content-type": "application/json"
-    },
+    "_headers": { "accept": "application/json, text/plain, */*" },
     "_responseType": "",
     "_sent": true,
     "_lowerCaseResponseHeaders": {
-      "content-security-policy": "default-src 'none'",
-      "content-type": "text/html; charset=utf-8",
-      "x-content-type-options": "nosniff",
-      "content-length": "148",
+      "x-vercel-id": "bom1::iad1::6kjlz-1702109594897-40ee04064e76",
+      "content-type": "application/json; charset=utf-8",
+      "content-length": "26",
       "x-vercel-cache": "MISS",
-      "date": "Fri, 08 Dec 2023 14:59:21 GMT",
+      "date": "Sat, 09 Dec 2023 08:13:15 GMT",
       "server": "Vercel",
       "x-powered-by": "Express",
       "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
-      "x-vercel-id": "bom1::iad1::65ttt-1702047560951-1df98e39587a",
+      "etag": "W/\"1a-pljHtlo127JYJR4E/RYOPb6ucbw\"",
       "cache-control": "public, max-age=0, must-revalidate",
       "access-control-allow-origin": "*"
     },
     "_subscriptions": [],
-    "responseURL": "https://bloggler-backend.vercel.app/api/post/comment"
+    "responseURL": "https://bloggler-backend.vercel.app/api/post/deleteComment"
   }
 }

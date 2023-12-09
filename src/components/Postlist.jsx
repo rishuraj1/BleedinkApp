@@ -34,7 +34,7 @@ const Postlist = ({ navigation }) => {
             style={{ flex: 1, marginBottom: 1 }}
             data={posts}
             keyExtractor={(item) => item?._id}
-            renderItem={({ item }) => <Postcard postData={item} navigation={navigation} />}
+            renderItem={({ item }) => <Postcard postData={item} setPosts={setPosts} />}
             ListFooterComponent={() => {
                 return loading ? <ActivityIndicator size="large" color="#0000ff" /> : null
             }}

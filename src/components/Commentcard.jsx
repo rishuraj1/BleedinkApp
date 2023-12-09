@@ -1,3 +1,4 @@
+
 import { View, Text, Pressable, TouchableOpacity, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
@@ -9,20 +10,23 @@ import { useDataStore } from '../store/store';
 
 const baseUrl = process.env.EXPO_PUBLIC_API_URL;
 
-const Commentcard = ({ commentData, navigation, isAuthor, postId, setModal, onDelete, modal }) => {
-    console.log('comment data', commentData)
+const Commentcard = ({ commentData, navigation, isAuthor, postId, setModal, onDelete }) => {
+    // console.log('comment data', commentData)
+    // console.log('user data', userData)
     const [commentorData, setCommentorData] = useState(null)
     const fetchUser = async () => {
         const userData = await AsyncStorage.getItem('userData')
         const user = JSON.parse(userData)
-        console.log('user', user?.access_token)
+        // console.log('user', user?.access_token)
         try {
             const commentor = await axios.get(`${baseUrl}/user/getUser?id=${commentData?.createdBy}`, {
                 headers: {
                     Authorization: `Bearer ${user?.access_token}`
                 }
             })
-            setCommentorData(commentor?.data)
+            // console.log('commentor', commentor?.data)
+            const data = commentor?.data
+            setCommentorData(data)
             console.log('commentor', commentorData)
         } catch (error) {
             console.log(JSON.stringify(error?.response))
@@ -30,7 +34,7 @@ const Commentcard = ({ commentData, navigation, isAuthor, postId, setModal, onDe
     }
 
     const thisUser = useDataStore((state) => state.user)
-    console.log('this user', thisUser)
+    // console.log('this user', thisUser)
 
     const isCommentor = thisUser?.userName === commentorData?.userName
     // console.log('is commentor', isCommentor)
@@ -39,6 +43,7 @@ const Commentcard = ({ commentData, navigation, isAuthor, postId, setModal, onDe
     useEffect(() => {
         fetchUser()
     }, [])
+    
     return (
         <View className="bg-white p-2 my-2" style={{
             width: widthPercentageToDP(96),
@@ -69,47 +74,14 @@ const Commentcard = ({ commentData, navigation, isAuthor, postId, setModal, onDe
                 </View>
                 {
                     (isAuthor || isCommentor) &&
-                    <TouchableOpacity onPress={() => setModal(!modal)}>
+                    <TouchableOpacity onPress={() => setModal(true)}>
                         <Ionicons name="ellipsis-vertical" size={24} color="black" />
                     </TouchableOpacity>
                 }
             </View>
-            <Text>{commentData?.content}</Text>
-
-            {
-                modal && (
-                    <Modal transparent={true} visible={modal} animationType="slide">
-                        <View style={{
-                            backgroundColor: "rgba(0,0,0,0.5)",
-                            flex: 1,
-                            justifyContent: "center",
-                            alignItems: "center"
-                        }}>
-                            <View style={{
-                                backgroundColor: "white",
-                                width: "90%",
-                                padding: 20,
-                                borderRadius: 10
-                            }}>
-                                <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>Delete Comment</Text>
-                                <Text style={{ fontSize: 16, marginBottom: 10 }}>Are you sure you want to delete this comment?</Text>
-                                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                                    <Pressable onPress={() => setModal(false)}>
-                                        <Text style={{ fontSize: 16, color: "red", fontWeight: "bold" }}>Cancel</Text>
-                                    </Pressable>
-                                    <Pressable onPress={() => {
-                                        console.log('delete comment')
-                                        onDelete(commentData?._id)
-                                        setModal(false)
-                                    }}>
-                                        <Text style={{ fontSize: 16, color: "green", fontWeight: "bold" }}>Delete</Text>
-                                    </Pressable>
-                                </View>
-                            </View>
-                        </View>
-                    </Modal>
-                )
-            }
+            <Text style={{ marginLeft: 5, fontSize: heightPercentageToDP(2) }} className="text-slate-600">
+                {commentData?.content}
+            </Text>
         </View>
     )
 }
