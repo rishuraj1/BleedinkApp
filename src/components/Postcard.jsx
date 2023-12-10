@@ -1,9 +1,8 @@
 import { View, Text, Pressable, Share, SafeAreaView, Touchable, TouchableOpacity } from "react-native";
 import React, { memo, useEffect, useState } from "react";
-import { UserButton, timeParser } from ".";
+import { UserButton, TimeParser } from ".";
 import { AntDesign, FontAwesome5, Feather, Ionicons } from '@expo/vector-icons';
 import { heightPercentageToDP } from "react-native-responsive-screen";
-import Animated, { BounceInUp } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import { useDataStore } from "../store/store";
 import axios from "axios";
@@ -67,7 +66,7 @@ const Postcard = ({ postData, setPosts, posts }) => {
 
 
   return (
-    <Animated.View
+    <View
       style={{
         backgroundColor: "#fff",
         padding: 7,
@@ -140,7 +139,7 @@ const Postcard = ({ postData, setPosts, posts }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </Animated.View>
+    </View>
   );
 };
 

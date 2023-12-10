@@ -123,9 +123,9 @@ const Postscreen = ({ route, navigation }) => {
                     <Text className="text-sm text-slate-600">From: </Text>
                     <Text className="text-sm text-indigo-500">{username}</Text>
                 </View>
-                <View className="my-2 bg-white rounded-sm">
+                <View className="my-2 bg-white p-2 rounded-sm">
                     <Text className="text-2xl font-semibold text-center">{post?.title}</Text>
-                    <Text className="text-center text-slate-700 text-sm">{post?.content}</Text>
+                    <Text className="text-center text-slate-700 text-base">{post?.content}</Text>
                 </View>
                 {/* Comments */}
                 <View className="flex-1 justify-center items-center my-2">
@@ -161,7 +161,7 @@ const Postscreen = ({ route, navigation }) => {
             <View className={`flex-row justify-center items-center bg-slate-200 border-t-[1px] ${isAuthor ? "border-indigo-500" : "border-slate-800"}`}>
                 <TextInput
                     placeholder={`Comment as ${isAuthor ? "Author" : userName}`}
-                    className={`w-4/5 h-10 bg-white rounded-sm px-3`}
+                    className={`w-4/5 h-10 bg-white rounded-sm text-base px-3`}
                     onChangeText={setCommentText}
                     value={commentText}
                     keyboardType='default'

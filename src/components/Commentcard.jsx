@@ -7,6 +7,7 @@ import UserButton from './UserButton';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
 import { useDataStore } from '../store/store';
+import Timeparser from './Timeparser';
 
 const baseUrl = process.env.EXPO_PUBLIC_API_URL;
 
@@ -76,79 +77,61 @@ const Commentcard = ({ commentData, navigation, isAuthor, postId, setModal, moda
     }
 
     return (
-        <View className="bg-white p-2 my-2" style={{
-            width: widthPercentageToDP(96),
+        <View style={{
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+            padding: 5,
+            marginVertical: 1,
             borderRadius: 5,
-            shadowColor: "#000",
-            shadowOffset: {
-                width: 0,
-                height: 1
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 2,
-            elevation: 1
+            width: widthPercentageToDP(100),
         }}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", alignContent: "center", alignItems: "center" }}>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <UserButton
-                        userImage={commentorData?.imageUrl}
-                        onPress={() => navigation.navigate('Profile', {
-                            username: commentorData?.userName,
-                            userId: commentorData?._id,
-                        })}
-                        width={heightPercentageToDP(6)}
-                        height={heightPercentageToDP(6)}
-                    />
+            <View style={{ marginTop: 6, marginRight: 2 }}>
+                <UserButton
+                    userImage={commentorData?.imageUrl}
+                    onPress={() => navigation.navigate('Profile', {
+                        username: commentorData?.userName,
+                        userId: commentorData?._id,
+                    })}
+                    width={heightPercentageToDP(6)}
+                    height={heightPercentageToDP(6)}
+                />
+            </View>
+            <View className="bg-white p-2 my-2 mr-auto" style={{
+                width: widthPercentageToDP(83),
+                borderRadius: 5,
+                shadowColor: "#000",
+                shadowOffset: {
+                    width: 0,
+                    height: 1
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 2,
+                elevation: 1,
+                flexDirection: "column",
+                justifyContent: "space-between",
+            }}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", flex: 1 }}>
                     <Text style={{ marginLeft: 5, fontSize: heightPercentageToDP(2) }} className="text-indigo-500">
                         {commentorData?.userName}
                     </Text>
-                </View>
-                {
-                    (isAuthor || isCommentor) &&
-                    <TouchableOpacity onPress={() => {
-                        onDeleteComment()
-                    }}>
-                        <MaterialCommunityIcons name="delete-empty" size={24} color="red" />
-                    </TouchableOpacity>
-                }
-            </View>
-            <Text style={{ marginLeft: 5, fontSize: heightPercentageToDP(2) }} className="text-slate-600">
-                {commentData?.content}
-            </Text>
-            {/* delete modal */}
-            {/* {
-                modal && (
-                    <Modal transparent={true} visible={modal} animationType="fade">
-                        <View style={{
-                            backgroundColor: "rgba(0,0,0,0.5)",
-                            flex: 1,
-                            justifyContent: "center",
-                            alignItems: "center"
+                    {
+                        (isAuthor || isCommentor) &&
+                        <TouchableOpacity className="ml-auto" onPress={() => {
+                            onDeleteComment()
                         }}>
-                            <View style={{
-                                backgroundColor: "white",
-                                width: "90%",
-                                padding: 20,
-                                borderRadius: 10
-                            }}>
-                                <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>Delete Comment</Text>
-                                <Text style={{ fontSize: 16, marginBottom: 10 }}>Are you sure you want to delte this comment</Text>
-                                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                                    <Pressable onPress={() => setModal(false)}>
-                                        <Text style={{ fontSize: 16, color: "red", fontWeight: "bold" }}>Cancel</Text>
-                                    </Pressable>
-                                    <Pressable onPress={() => {
-                                        onDeleteComment()
-                                    }}>
-                                        <Text style={{ fontSize: 16, color: "green", fontWeight: "bold" }}>Delete</Text>
-                                    </Pressable>
-                                </View>
-                            </View>
-                        </View>
-                    </Modal>
-                )
-            } */}
-        </View>
+                            <MaterialCommunityIcons name="delete-empty" size={24} color="red" />
+                        </TouchableOpacity>
+                    }
+                </View>
+                <Text style={{ marginLeft: 5, fontSize: heightPercentageToDP(2) }} className="text-slate-600">
+                    {commentData?.content}
+                </Text>
+                <Text style={{ marginLeft: 5, fontSize: heightPercentageToDP(1.5), marginTop: 3, alignItems: "flex-end", flex: 1 }} className="text-slate-600">
+                    <Timeparser timestamp={commentData?.createdAt} />
+                </Text>
+            </View>
+        </View >
     )
 }
 

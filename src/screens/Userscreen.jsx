@@ -24,6 +24,7 @@ const Userscreen = ({ navigation, route }) => {
   // console.log(isThisUser, "is this user");
 
   const getPosts = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(`${baseUrl}/post?userId=${userId || thisUser?._id || user?._id}`);
       const data = await response?.data?.data;
@@ -31,13 +32,15 @@ const Userscreen = ({ navigation, route }) => {
       // console.log(posts, "posts");
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   }
 
   const getUser = async () => {
     const userData = await AsyncStorage.getItem("userData");
     const thisUser = JSON.parse(userData);
-    console.log(user, "user");
+    // console.log(user, "user");
     try {
       const res = await axios.get(`${baseUrl}/user/getUser?id=${userId}`, {
         headers: {
@@ -45,7 +48,7 @@ const Userscreen = ({ navigation, route }) => {
         },
       });
       setUser(res?.data);
-      console.log(user, "user data from profile");
+      // console.log(user, "user data from profile");
     } catch (err) {
       console.log(err, "error");
     }
@@ -181,26 +184,27 @@ const Userscreen = ({ navigation, route }) => {
           <Text className="text-2xl font-semibold text-slate-700 mt-2">{`${username}'s Posts`}</Text>
         )
       }
-      <FlatList
-        data={posts}
-        keyExtractor={(item) => item?._id}
-        renderItem={({ item }) => <Postcard postData={item} navigation={navigation} />}
-        CellRendererComponent={({ children, ...props }) => {
-          return (
-            <Pressable
-              onPress={() => {
-                navigation.navigate("Post", { postData: props?.item });
-              }}
-              className="flex-1"
-            >
-              {children}
-            </Pressable>
-          );
-        }}
-        onRefresh={getPosts}
-        refreshing={updating}
-        extraData={posts}
-      />
+      <View className="flex-row items-center justify-center">
+        <FlatList
+          data={posts}
+          keyExtractor={(item) => item?._id}
+          renderItem={({ item }) => <Postcard postData={item} navigation={navigation} />}
+          onRefresh={getPosts}
+          refreshing={updating}
+          extraData={posts}
+          ListEmptyComponent={() => {
+            return loading ? (
+              <View className="flex-1 items-center justify-center">
+                <Text className="text-2xl font-semibold text-slate-700 mt-2">Loading...</Text>
+              </View>
+            ) : (
+              <View className="flex-1 items-center justify-center">
+                <Text className="text-2xl font-semibold text-slate-700 mt-2">No Posts</Text>
+              </View>
+            )
+          }}
+        />
+      </View>
     </SafeAreaView>
   );
 };

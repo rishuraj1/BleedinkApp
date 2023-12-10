@@ -18,8 +18,8 @@ const Postlist = ({ navigation }) => {
         setLoading(true)
         try {
             const res = await fetchPosts()
+            // console.log(res?.hasmore, 'res')
             setPosts(res?.data)
-            setLoading(false)
             // console.log(posts)
         } catch (err) {
             console.log(err)
@@ -51,7 +51,18 @@ const Postlist = ({ navigation }) => {
             ListEmptyComponent={({ item }) => {
                 return loading ? (
                     <PostcardSkeleton item={item} />
-                ) : null
+                ) : (
+                    <View
+                        style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginTop: heightPercentageToDP('10%'),
+                        }}
+                    >
+                        <Text>No posts to show</Text>
+                    </View>
+                )
             }}
             onRefresh={() => getPosts()}
             refreshing={loading}

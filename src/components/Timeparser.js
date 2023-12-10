@@ -1,9 +1,12 @@
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-dayjs.extend(relativeTime);
+import React from "react";
+import { Text } from "react-native";
+import moment from "moment";
 
-const timeParser = (time) => {
-  return dayjs(time).fromNow();
+const Timeparser = ({ timestamp }) => {
+  const timeAgo = moment(timestamp).fromNow();
+  // console.log(timeAgo);
+  // console.log(timestamp, timeAgo);
+  return <Text>{timeAgo}</Text>;
 };
 
-export default timeParser;
+export default Timeparser;

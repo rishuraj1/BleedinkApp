@@ -64,7 +64,7 @@ const Homescreen = ({ navigation }) => {
         />
       </View>
       <Modal
-        animationType="slide"
+        animationType="fade"
         statusBarTranslucent={true}
         transparent
         visible={modalVisible}
@@ -83,11 +83,6 @@ const Homescreen = ({ navigation }) => {
             </View>
             <View className="flex justify-between items-center py-8">
               <View className="py-2">
-                <Button bgcolor={"blue"} width={widthPercentageToDP(70)}>
-                  Settings
-                </Button>
-              </View>
-              <View className="py-2">
                 <Button
                   onPress={() => {
                     navigation.navigate("Profile", {
@@ -96,7 +91,7 @@ const Homescreen = ({ navigation }) => {
                     })
                     setModalVisible(!modalVisible)
                   }}
-                  bgcolor={"green"}
+                  bgcolor={"blue"}
                   width={widthPercentageToDP(70)}
                 >
                   My Profile
