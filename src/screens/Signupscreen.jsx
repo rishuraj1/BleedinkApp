@@ -23,6 +23,7 @@ const Signupscreen = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     custopacity.value = 0;
@@ -45,6 +46,7 @@ const Signupscreen = ({ navigation }) => {
       alert("Please fill all the fields");
       return;
     }
+    setLoading(true);
     const url = "https://bloggler-backend.vercel.app/api/user/signup";
     try {
       const body = {
@@ -59,6 +61,8 @@ const Signupscreen = ({ navigation }) => {
       navigation.navigate("Home");
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -141,7 +145,7 @@ const Signupscreen = ({ navigation }) => {
 
         <View className="flex-1 justify-start" style={{ gap: hp(2) }}>
           <Button width={wp(80)} bgcolor="#3F51B5" onPress={handleSignup}>
-            Sign up
+            {loading ? "Loading..." : "Sign up"}
           </Button>
           <Text
             className="text-slate-800 font-semibold"

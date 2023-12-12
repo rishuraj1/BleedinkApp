@@ -52,7 +52,7 @@ const Homescreen = ({ navigation }) => {
 
   return (
     <SafeAreaView className="bg-slate-200 flex-1">
-      <View className="py-5 px-2 flex-row flex justify-between items-center">
+      <View className="pt-5 px-2 flex-row flex justify-between items-center">
         <Text className="text-2xl font-semibold text-slate-900">
           Hello <Text className="text-indigo-500">{user?.userName}</Text>
         </Text>
@@ -118,7 +118,7 @@ const Homescreen = ({ navigation }) => {
       <SafeAreaView
         className="px-2 bg-slate-200 flex-1"
       >
-        <SafeAreaView className="flex-row flex justify-between">
+        <View className="flex-row flex justify-between">
           <TextInput
             className="rounded-md p-2 w-full text-slate-900 bg-slate-300 border-2 border-slate-300 mr-2"
             placeholder="Search Posts"
@@ -127,6 +127,8 @@ const Homescreen = ({ navigation }) => {
             style={{
               fontSize: 18,
               fontWeight: "500",
+              fontFamily: "Roboto",
+              flex: 1,
             }}
           />
           <TouchableOpacity
@@ -137,7 +139,7 @@ const Homescreen = ({ navigation }) => {
               <FontAwesome name="search" size={24} color="#3F51B5" />
             </View>
           </TouchableOpacity>
-        </SafeAreaView>
+        </View>
         {
           searchedPosts?.length > 0 && (
             <View style={{ flex: 1 }} className="h-full">

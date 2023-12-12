@@ -26,6 +26,7 @@ const Loginscreen = ({ navigation }) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     custopacity.value = 0;
@@ -48,6 +49,7 @@ const Loginscreen = ({ navigation }) => {
       alert("Please enter all the fields");
       return;
     }
+    setLoading(true);
     try {
       const body = {
         email,
@@ -70,6 +72,8 @@ const Loginscreen = ({ navigation }) => {
       navigation.navigate("Home");
     } catch (error) {
       console.log(error, "loginscreen error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -138,7 +142,7 @@ const Loginscreen = ({ navigation }) => {
         </View>
 
         <Button width={wp(80)} bgcolor="#3F51B5" onPress={handleLogin}>
-          Login
+          {loading ? "Loading..." : "Login"}
         </Button>
 
         <View

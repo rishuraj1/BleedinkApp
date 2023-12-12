@@ -49,13 +49,18 @@ const Postcard = ({ postData, setPosts, posts }) => {
       const response = await axios.patch(`${baseUrl}/post/like/${post?._id}`, {}, options)
       console.log(response?.data, "like response");
       const updatedPost = response?.data;
-      setPosts([...posts, updatedPost])
       setPost(updatedPost);
       console.log(post?.like?.includes(thisUser?._id), thisUser?._id, "is liked");
     } catch (error) {
       console.log(error, "like error");
     }
   }
+
+  useEffect(() => {
+    setPost(postData);
+    setAuthor(post?.createdBy);
+  }, [postData, setPost, setAuthor])
+
 
   useEffect(() => {
     setIsLiked(post?.like?.includes(thisUser?._id));
@@ -101,7 +106,7 @@ const Postcard = ({ postData, setPosts, posts }) => {
             </Text>
           </View>
           <Text style={{ marginLeft: 5 }}>
-            {post?.createdAt}
+            <TimeParser timestamp={post?.createdAt} />
           </Text>
         </View>
         <Text style={{ fontSize: 20, fontWeight: "bold", marginVertical: 10 }}>

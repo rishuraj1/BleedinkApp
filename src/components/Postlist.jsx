@@ -20,7 +20,7 @@ const Postlist = ({ navigation }) => {
             const res = await fetchPosts()
             // console.log(res?.hasmore, 'res')
             setPosts(res?.data)
-            // console.log(posts)
+            console.log(posts)
         } catch (err) {
             console.log(err)
         } finally {
@@ -30,7 +30,7 @@ const Postlist = ({ navigation }) => {
 
     useEffect(() => {
         getPosts()
-    }, [setPosts])
+    }, [])
 
     return (
         <FlatList
@@ -50,7 +50,7 @@ const Postlist = ({ navigation }) => {
             }}
             ListEmptyComponent={({ item }) => {
                 return loading ? (
-                    <PostcardSkeleton item={item} />
+                    Array.from({ length: 10 }).map((_, i) => <PostcardSkeleton key={i} />)
                 ) : (
                     <View
                         style={{
